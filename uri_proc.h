@@ -1,15 +1,10 @@
-<!-- [![Build Status](https://travis-ci.org/luongnv89/pcap_dump.svg?branch=master)](https://travis-ci.org/luongnv89/pcap_dump) -->
+/**
+ * URI processing - provide some simple APIs to work with URI
+ */
 
-### Introduce
+#ifndef URI_PROC_H
+#define URI_PROC_H
 
-A simple c/cpp API for processing URI
-
-The list of extensions from [Root Zone Database](http://www.iana.org/domains/root/db)
-
-
-### API 
-
-```
 /**
  * Check the validation of given URI
  * @param  uri URI to check
@@ -19,11 +14,8 @@ The list of extensions from [Root Zone Database](http://www.iana.org/domains/roo
  *               
  */
 int up_valid_uri(char * uri, int uri_len);
-```
 
-Check the validation of a given URI
 
-```
 /**
  * Get hostname from a given URI
  * @param  uri URI
@@ -32,11 +24,7 @@ Check the validation of a given URI
  *               NULL if the URI is invalid
  */
 char * up_get_host(char * uri, int uri_len);
-```
 
-Get hostname from a given URI
-
-```
 /**
  * Get domain name from a given URI
  * @param  uri     URI
@@ -45,11 +33,7 @@ Get hostname from a given URI
  *               NULL if the URI is invalid
  */
 char * up_get_domain(char * uri, int uri_len);
-```
 
-Get domain name from a given URI
-
-```
 /**
  * Get subdomain name from a given URI
  * @param  uri     URI
@@ -59,27 +43,7 @@ Get domain name from a given URI
  *                 	- URI is invalid
  *                 	- There is no subdomain
  */	
-char * up_get_subdomain(char * uri, int uri_len); 
-```
+char * up_get_subdomain(char * uri, int uri_len);
 
-Get subdomain name from a given URI
-
-### Install
-
-No need to install it. Just include this file in your code and use the API.  
-
-```
-#include "uri_proc.h"
-```
-
-Compile your program:
-
-```
-gcc -o mytest uri_proc/uri_proc.c mytest.c
-```
-
-You can look at the example to see how it works.
-
-### Change logs
-
-- 24/04/2017: Create APIs list
+#endif
+// End of URI_PROC_H
