@@ -1,0 +1,7 @@
+com
+net
+gov
+org
+int
+edu
+mil
