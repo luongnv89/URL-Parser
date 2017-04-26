@@ -130,6 +130,13 @@ char * up_get_protocol(uri_proc_t * up);
 char * up_get_path(uri_proc_t * up);
 
 /**
+ * Extract port number
+ * @param  up [description]
+ * @return    [description]
+ */
+unsigned int up_get_port_number(uri_proc_t * up);
+
+/**
  * Show up structure
  * @param up [description]
  */

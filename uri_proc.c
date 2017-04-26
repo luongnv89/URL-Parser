@@ -748,6 +748,11 @@ void * up_get_user_arguement(uri_proc_t * up) {
 	return up->user_args;
 };
 
+unsigned int up_get_port_number(uri_proc_t * up){
+	if(up == NULL) return 0;
+	return up->port_number;
+};
+
 void up_show(uri_proc_t * up) {
 	if (up == NULL) {
 		printf("\nuri_proc is NULL!\n");

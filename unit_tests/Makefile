@@ -16,6 +16,8 @@ endif
 APP = uriProc
 SRC =   ../uri_proc.c \
 		UnitTest_uri_proc.c \
+		UnitTest_uri.c \
+		UnitTest_host.c \
 		UnitTest_Google.c
 all:
 	$(CPP) -o $(APP) $(SRC) $(CFLAGS) $(LIBS)

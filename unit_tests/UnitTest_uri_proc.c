@@ -21,7 +21,6 @@ protected:
         total_host = 0;
         create_string_array_from_file(uris, URI_PATH, &total_domain);
         create_string_array_from_file(hosts, HOST_PATH, &total_host);
-        // Read host from file
     }
 
     void TearDown() {

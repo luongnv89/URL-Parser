@@ -9,6 +9,13 @@ The list of extensions from [Root Zone Database](http://www.iana.org/domains/roo
 ### API 
 
 ```
+uri_init(char * domain_location)
+```
+
+Initialize `uri_proc` with giving location of `domains` locations - where all the domain name files are
+
+
+```
 uri_proc_t * up_create(char * uri, int uri_len, void * user_args);
 ```
 
@@ -116,6 +123,18 @@ No need to install it. Just include this file in your code and use the API.
 #include "uri_proc.h"
 ```
 
+### Usage
+
+Before using uri_proc, we need to init:
+
+```
+up_init("unit_tests/domains");
+uri_proc_t * up = up_create("https://subdomain.domain.com.us:1234/this/is/the/path",53,NULL);
+up_show(up);
+uri_proc_t * up2 = up_create_from_host("subdomain.domain.com.us:1234",28,NULL);
+up_show(up2);
+```
+
 Compile your program:
 
 ```
@@ -124,7 +143,7 @@ gcc -o mytest uri_proc/uri_proc.c example.c
 
 You can look at the example to see how it works.
 
-## example.c
+### example.c
 
 Compile:
 
