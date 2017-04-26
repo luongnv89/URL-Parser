@@ -8,7 +8,7 @@
 /**
  * Present a structure of a URI
  */
-struct uri_proc_struct{ // https://luongnv89.github.io.fr/radio
+typedef struct uri_proc_struct{ // https://luongnv89.github.io.fr:80/radio
 	unsigned int length; // Length of URI
 	char * based_uri; // https://luongnv89.github.io.fr
 	char * host; // host: luongnv89.github.io.fr
@@ -17,8 +17,15 @@ struct uri_proc_struct{ // https://luongnv89.github.io.fr/radio
 	char * top_domain; // root domain: .io.fr
 	char * protocol; // protocol: https
 	char * path; // URI path: radio
+	unsigned port_number; // Port number: 80
 	void * user_args; // User argument
 }uri_proc_t;
+
+/**
+ * Clean memmory of static variables: list of country domain, top_domain and generic domain
+ *  This is a public function because we need to call it explicitly when we finish working with up
+ */
+void up_close();
 
 /**
  * Create a uri_proc_struct
@@ -30,13 +37,25 @@ struct uri_proc_struct{ // https://luongnv89.github.io.fr/radio
  *                     	- Cannot allocate memory for new uri_proc_struct
  *                     	- given URI is invalid
  */
-struct uri_proc_t * up_create(char * uri, int uri_len, void * user_args);
+uri_proc_t * up_create(char * uri, int uri_len, void * user_args);
+
+/**
+ * Create a uri_proc_struct from a hostname
+ * @param  hostname  hostname
+ * @param  host_len  length of hostname
+ * @param  user_args user argument
+ * @return           a pointer points to a new uri_proc_struct
+ *                     NULL if:
+ *                     - cannot allocate memory for a new uri_proc_struct
+ *                     - given hostname is invalid
+ */
+uri_proc_t * up_create_from_host(char * hostname, int host_len, void * user_args);
 
 /**
  * Free a uri_proc_struct
  * @param  up given up
  */
-void * up_free(struct uri_proc_t *up);
+void up_free(uri_proc_t *up);
 
 /**
  * Check the validation of a given URI
@@ -55,22 +74,24 @@ int up_valid_uri(char * uri, int uri_len);
  * @param  up [description]
  * @return    [description]
  */
-char * up_get_based_uri(struct uri_proc_t * up);
+char * up_get_based_uri(uri_proc_t * up);
 
 
-char * up_get_host(struct uri_proc_t * up);
+char * up_get_host(uri_proc_t * up);
 
 
-char * up_get_based_domain(struct uri_proc_t * up);
+char * up_get_based_domain(uri_proc_t * up);
 
 
-char * up_get_sub_domain(struct uri_proc_t * up);
+char * up_get_sub_domain(uri_proc_t * up);
 
-char * up_get_top_domain(struct uri_proc_t * up);
+char * up_get_top_domain(uri_proc_t * up);
 
-char * up_get_protocol(struct uri_proc_t * up);
+char * up_get_protocol(uri_proc_t * up);
 
-char * up_get_path(struct uri_proc_t * up);
+char * up_get_path(uri_proc_t * up);
+
+void up_show(uri_proc_t * up);
 
 #endif
 // End of URI_PROC_H
