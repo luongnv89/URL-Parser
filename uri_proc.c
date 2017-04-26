@@ -8,9 +8,9 @@
 #define UP_NUMBER_GENERIC_DOMAIN 255 // maximum 215 domain
 #define UP_MAX_BUFFER_SIZE 255 // Maximum length of domain - 18
 #define UP_MAX_DOMAIN_LENGTH 20 // Maximum length of domain - 18
-#define UP_DOMAIN_TOP_LEVEL "../domains/top_level.txt" // Path to the file contains top level domains
-#define UP_DOMAIN_CONTRY_CODE "../domains/country_code.txt" // Path to the file contains list country code domain
-#define UP_DOMAIN_GENERIC_LOCATION "../domains/generic-" // Path to the location where all the files contains list generic domain.
+#define UP_DOMAIN_TOP_LEVEL "domains/top_level.txt" // Path to the file contains top level domains
+#define UP_DOMAIN_CONTRY_CODE "domains/country_code.txt" // Path to the file contains list country code domain
+#define UP_DOMAIN_GENERIC_LOCATION "domains/generic-" // Path to the location where all the files contains list generic domain.
 //- - - - - - - - - - - - - - - - - - -
 //
 //	P R I V A T E
