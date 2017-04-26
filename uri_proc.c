@@ -6,6 +6,7 @@
 #define UP_NUMBER_COUNTRY_CODE	256 // 255 country code
 #define UP_NUMBER_TOP_LEVEL 8 // 7 top level domain
 #define UP_NUMBER_GENERIC_DOMAIN 255 // maximum 215 domain
+#define UP_MAX_BUFFER_SIZE 255 // Maximum length of domain - 18
 #define UP_MAX_DOMAIN_LENGTH 20 // Maximum length of domain - 18
 #define UP_DOMAIN_TOP_LEVEL "../domains/top_level.txt" // Path to the file contains top level domains
 #define UP_DOMAIN_CONTRY_CODE "../domains/country_code.txt" // Path to the file contains list country code domain
@@ -96,41 +97,6 @@ int _up_check_top_domain(char * domain, int length, char ** list_domains) {
 }
 
 /**
- * Read content of given fileName and put in the list_domains
- * @param  list_domains list_domains to update the value
- * @param  fileName     given file - where the contents are
- * @return              0 - failed
- *                        1 - success
- */
-int _up_load_domain(char ** list_domains, char * fileName) {
-	if (access(fileName, R_OK) == -1) {
-		fprintf(stderr, "[error] _up_load_domain: file does not exists: %s\n", fileName);
-		return 0;
-	}
-	int index = 0;
-	FILE *fd = NULL;
-	char buffer[UP_MAX_DOMAIN_LENGTH];
-	fd = fopen(fileName, "r");
-	if (fd == NULL) {
-		fprintf(stderr, "[error] _up_load_domain: Cannot read file: %s\n", fileName);
-		return 0;
-	}
-
-	while (fgets(buffer, UP_MAX_DOMAIN_LENGTH, (FILE*)fd) != NULL) {
-		char * new_domain = NULL;
-		new_domain = (char *) malloc(sizeof(char) * UP_MAX_DOMAIN_LENGTH);
-		memcpy(new_domain, buffer, UP_MAX_DOMAIN_LENGTH);
-		new_domain[strlen(new_domain)] = '\0';
-		list_domains[index] = new_domain;
-		index++;
-	}
-	list_domains[index] = NULL;
-	fclose(fd);
-	return 1;
-}
-
-
-/**
  * Initialize the value of _up_generic
  * @return 1 - if initialize successful
  *         -1 - if there is some problem in loading any value
@@ -143,7 +109,7 @@ int _up_load_domain_all_generic() {
 		fileName = (char *) malloc( sizeof(char) * 256);
 		sprintf(fileName, "%s%d", UP_DOMAIN_GENERIC_LOCATION, i);
 		if (access(fileName, R_OK) != -1) {
-			if (_up_load_domain(_up_generic[i], fileName) != 0) {
+			if (create_string_array_from_file(_up_generic[i], fileName,NULL) != 0) {
 				free(fileName);
 				return -1;
 			}
@@ -532,12 +498,12 @@ int _up_valid_hostname(char * hostname, int host_len) {
  */
 int _up_init() {
 	// Init list of country domain
-	if (_up_load_domain(_up_country_code, UP_DOMAIN_CONTRY_CODE) == 0) {
+	if (create_string_array_from_file(_up_country_code, UP_DOMAIN_CONTRY_CODE,NULL) == 0) {
 		fprintf(stderr, "[error] up_init: cannot init list of country domain\n");
 		return 1;
 	}
 	// Init list of top level domain
-	if (_up_load_domain(_up_top_level, UP_DOMAIN_TOP_LEVEL) == 0) {
+	if (create_string_array_from_file(_up_top_level, UP_DOMAIN_TOP_LEVEL,NULL) == 0) {
 		fprintf(stderr, "[error] up_init: cannot init list of top domain\n");
 		return 2;
 	}
@@ -821,4 +787,38 @@ void up_close() {
 	printf("Cleaned uri_proc!\n");
 #endif	
 	
+}
+
+int create_string_array_from_file(char ** list_strings, char * fileName, int * counter) {
+    if (access(fileName, R_OK) == -1) {
+        fprintf(stderr, "[error] create_string_array_from_file: file does not exists: %s\n", fileName);
+        return 0;
+    }
+    
+    FILE *fd = NULL;
+    
+    fd = fopen(fileName, "r");
+    
+    if (fd == NULL) {
+        fprintf(stderr, "[error] create_string_array_from_file: Cannot read file: %s\n", fileName);
+        return 0;
+    } else {
+        int index = 0;
+        char * buffer;
+        buffer = (char*)malloc(sizeof(char) * UP_MAX_BUFFER_SIZE);
+        while (fgets(buffer, UP_MAX_BUFFER_SIZE, (FILE*)fd) != NULL) {
+            int length = strlen(buffer);
+            char * new_string = NULL;
+            new_string = (char *) malloc(sizeof(char) * (length+1));
+            memcpy(new_string, buffer, length);
+            new_string[length] = '\0';
+            list_strings[index] = new_string;
+            index++;
+        }
+        if(counter!=NULL) *counter = index;
+        list_strings[index] = 0x0;
+        free(buffer);
+    }
+    fclose(fd);
+    return 1;
 }

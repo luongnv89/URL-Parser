@@ -6,42 +6,9 @@
 #include "unistd.h"
 #include "../uri_proc.h"
 #include "gtest/gtest.h"
-#define UP_MAX_BUFFER_SIZE 255 // Maximum length of domain - 18
 #define URI_PATH "valid_uri.txt"
 #define HOST_PATH "valid_host.txt"
 using namespace std;
-
-void create_string_array_from_file(char ** list_strings, char * fileName, int * counter) {
-    if (access(fileName, R_OK) == -1) {
-        fprintf(stderr, "[error] create_string_array_from_file: file does not exists: %s\n", fileName);
-    }
-    
-    FILE *fd = NULL;
-    
-    fd = fopen(fileName, "r");
-    
-    if (fd == NULL) {
-        fprintf(stderr, "[error] create_string_array_from_file: Cannot read file: %s\n", fileName);
-    } else {
-        int index = 0;
-        char * buffer;
-        buffer = (char*)malloc(sizeof(char) * UP_MAX_BUFFER_SIZE);
-        while (fgets(buffer, UP_MAX_BUFFER_SIZE, (FILE*)fd) != NULL) {
-            int length = strlen(buffer);
-            char * new_string = NULL;
-            new_string = (char *) malloc(sizeof(char) * (length+1));
-            memcpy(new_string, buffer, length);
-            new_string[length] = '\0';
-            list_strings[index] = new_string;
-            index++;
-        }
-        if(counter!=NULL) *counter = index;
-        list_strings[index] = 0x0;
-        free(buffer);
-    }
-    fclose(fd);
-}
-
 
 class uri_proc : public testing::Test {
 

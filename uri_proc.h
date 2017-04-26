@@ -93,5 +93,17 @@ char * up_get_path(uri_proc_t * up);
 
 void up_show(uri_proc_t * up);
 
+// Utility functions
+/**
+ * Update a string array by reading from a file.
+ * Each element of string array will contain the content from one line of the file
+ * @param list_strings array string
+ * @param fileName     file name
+ * @param counter      counter - count number of elements -> can be NULL
+ * @return	0 - failed
+ *           1 - Success
+ */
+int create_string_array_from_file(char ** list_strings, char * fileName, int * counter);
+
 #endif
 // End of URI_PROC_H
