@@ -22,6 +22,17 @@ typedef struct uri_proc_struct{
 }uri_proc_t;
 
 /**
+ * Initialize the static variables for uri_proccessing
+ * - Initialize the list of country_domain
+ * - Initialize the list of top domain
+ * - Initialize the list of generic domain
+ * @return 0 - if everything OK
+ *           1 - if failed to init list of country domain
+ *           2 - if failed to init list of top domain
+ *           3 - if failed to init list of generic domain
+ */
+int up_init(char * domain_location);
+/**
  * Clean memmory of static variables: list of country domain, top_domain and generic domain
  *  This is a public function because we need to call it explicitly when we finish working with up
  */

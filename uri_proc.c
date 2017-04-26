@@ -8,9 +8,9 @@
 #define UP_NUMBER_GENERIC_DOMAIN 255 // maximum 215 domain
 #define UP_MAX_BUFFER_SIZE 255 // Maximum length of domain - 18
 #define UP_MAX_DOMAIN_LENGTH 20 // Maximum length of domain - 18
-#define UP_DOMAIN_TOP_LEVEL "domains/top_level.txt" // Path to the file contains top level domains
-#define UP_DOMAIN_CONTRY_CODE "domains/country_code.txt" // Path to the file contains list country code domain
-#define UP_DOMAIN_GENERIC_LOCATION "domains/generic-" // Path to the location where all the files contains list generic domain.
+#define UP_DOMAIN_TOP_LEVEL "top_level.txt" // Path to the file contains top level domains
+#define UP_DOMAIN_CONTRY_CODE "country_code.txt" // Path to the file contains list country code domain
+#define UP_DOMAIN_GENERIC_LOCATION "generic-" // Path to the location where all the files contains list generic domain.
 //- - - - - - - - - - - - - - - - - - -
 //
 //	P R I V A T E
@@ -102,12 +102,12 @@ int _up_check_top_domain(char * domain, int length, char ** list_domains) {
  *         -1 - if there is some problem in loading any value
  *
  */
-int _up_load_domain_all_generic() {
+int _up_load_domain_all_generic(char * domain_location) {
 	int i = 0;
 	for ( i = 0; i < UP_MAX_DOMAIN_LENGTH; i++) {
 		char * fileName;
 		fileName = (char *) malloc( sizeof(char) * 256);
-		sprintf(fileName, "%s%d", UP_DOMAIN_GENERIC_LOCATION, i);
+		sprintf(fileName, "%s/%s%d", domain_location,UP_DOMAIN_GENERIC_LOCATION, i);
 		if (access(fileName, R_OK) != -1) {
 			if (create_string_array_from_file(_up_generic[i], fileName,NULL) != 0) {
 				free(fileName);
@@ -485,6 +485,12 @@ int _up_valid_hostname(char * hostname, int host_len) {
 	return 0;
 }
 
+//- - - - - - - - - - - - - - - - - - -
+//
+//	P U B L I C   F U N C T I O N S
+//
+//- - - - - - - - - - - - - - - - - - -
+
 /**
  * Initialize the static variables for uri_proccessing
  * - Initialize the list of country_domain
@@ -494,33 +500,33 @@ int _up_valid_hostname(char * hostname, int host_len) {
  *           1 - if failed to init list of country domain
  *           2 - if failed to init list of top domain
  *           3 - if failed to init list of generic domain
- *  Note that: This function should be private because we don't have to call it explicitly          
  */
-int _up_init() {
+int up_init(char * domain_location) {
+	
 	// Init list of country domain
-	if (create_string_array_from_file(_up_country_code, UP_DOMAIN_CONTRY_CODE,NULL) == 0) {
+	char country_domain_file[255];
+	sprintf(country_domain_file,"%s/%s",domain_location,UP_DOMAIN_CONTRY_CODE);
+	country_domain_file[strlen(country_domain_file)] = '\0';
+	if (create_string_array_from_file(_up_country_code, country_domain_file,NULL) == 0) {
 		fprintf(stderr, "[error] up_init: cannot init list of country domain\n");
 		return 1;
 	}
 	// Init list of top level domain
-	if (create_string_array_from_file(_up_top_level, UP_DOMAIN_TOP_LEVEL,NULL) == 0) {
+	char top_domain_file[255];
+	sprintf(top_domain_file,"%s/%s",domain_location,UP_DOMAIN_TOP_LEVEL);
+	top_domain_file[strlen(top_domain_file)] = '\0';
+	if (create_string_array_from_file(_up_top_level, top_domain_file,NULL) == 0) {
 		fprintf(stderr, "[error] up_init: cannot init list of top domain\n");
 		return 2;
 	}
 	// Init list of generic domain
-	if (_up_load_domain_all_generic() == 0){
+	if (_up_load_domain_all_generic(domain_location) == 0){
 		fprintf(stderr, "[error] up_init: cannot init list of top domain\n");
 		return 3;
 	}
 	_up_inited = 1;
 	return 0;
 };
-
-//- - - - - - - - - - - - - - - - - - -
-//
-//	P U B L I C   F U N C T I O N S
-//
-//- - - - - - - - - - - - - - - - - - -
 
 /**
  * Create a uri_proc_struct
@@ -535,9 +541,8 @@ int _up_init() {
 uri_proc_t * up_create(char * uri, int uri_len, void * user_args) {
 	// Always check for initialisation of static variables
 	if(_up_inited == 0){
-		if(_up_init() != 0){
-			return NULL;
-		}
+		fprintf(stderr, "[error] You need to call up_init(domain_location) before using up_\n");
+		return NULL;
 	}
 
 	int ret_valid = up_valid_uri(uri, uri_len);
@@ -568,9 +573,8 @@ uri_proc_t * up_create(char * uri, int uri_len, void * user_args) {
 uri_proc_t * up_create_from_host(char * hostname, int host_len, void * user_args) {
 	// Always check for initialisation of static variables
 	if(_up_inited == 0){
-		if(_up_init() != 0){
-			return NULL;
-		}
+		fprintf(stderr, "[error] You need to call up_init(domain_location) before using up_\n");
+		return NULL;
 	}
 
 	int ret_valid = _up_valid_hostname(hostname, host_len);

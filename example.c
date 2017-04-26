@@ -106,7 +106,7 @@ int main(int argc, char ** argv) {
 
 	// Parse option
 	parseOptions(argc, argv, input , &mode);
-
+	up_init("domains");
 	uri_proc_t *up = NULL;
 
 	if (mode == HOSTNAME_MODE) {

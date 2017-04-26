@@ -6,8 +6,8 @@
 #include "unistd.h"
 #include "../uri_proc.h"
 #include "gtest/gtest.h"
-#define URI_PATH "unit_tests/valid_uri.txt"
-#define HOST_PATH "unit_tests/valid_host.txt"
+#define URI_PATH "valid_uri.txt"
+#define HOST_PATH "valid_host.txt"
 using namespace std;
 
 class uri_proc : public testing::Test {
@@ -15,7 +15,7 @@ class uri_proc : public testing::Test {
 protected:
 
     void SetUp() {
-
+        up_init("../domains");
         // Read domains from file
         total_domain = 0;
         total_host = 0;

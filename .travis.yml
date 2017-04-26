@@ -13,5 +13,4 @@ before_install:
 script:
     - cd unit_tests/
     - make
-    - cd .. # Back to uri_proc
-    - ./unit_tests/uriProc
+    - make test
