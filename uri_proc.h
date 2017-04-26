@@ -6,9 +6,9 @@
 #define URI_PROC_H
 
 /**
- * Present a structure of a URI
+ * Present a structure of a URI: https://luongnv89.github.io.fr:8080/radio
  */
-typedef struct uri_proc_struct{ // https://luongnv89.github.io.fr:80/radio
+typedef struct uri_proc_struct{ 
 	unsigned int length; // Length of URI
 	char * based_uri; // https://luongnv89.github.io.fr
 	char * host; // host: luongnv89.github.io.fr
@@ -17,7 +17,7 @@ typedef struct uri_proc_struct{ // https://luongnv89.github.io.fr:80/radio
 	char * top_domain; // root domain: .io.fr
 	char * protocol; // protocol: https
 	char * path; // URI path: radio
-	unsigned port_number; // Port number: 80
+	unsigned port_number; // Port number: 8080
 	void * user_args; // User argument
 }uri_proc_t;
 
@@ -76,21 +76,52 @@ int up_valid_uri(char * uri, int uri_len);
  */
 char * up_get_based_uri(uri_proc_t * up);
 
-
+/**
+ * Get host name
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_host(uri_proc_t * up);
 
-
+/**
+ * Get based domain
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_based_domain(uri_proc_t * up);
 
-
+/**
+ * Get sub domain
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_sub_domain(uri_proc_t * up);
 
+/**
+ * Get top domain
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_top_domain(uri_proc_t * up);
 
+/**
+ * Get protocol
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_protocol(uri_proc_t * up);
 
+/**
+ * Get path
+ * @param  up [description]
+ * @return    [description]
+ */
 char * up_get_path(uri_proc_t * up);
 
+/**
+ * Show up structure
+ * @param up [description]
+ */
 void up_show(uri_proc_t * up);
 
 // Utility functions
