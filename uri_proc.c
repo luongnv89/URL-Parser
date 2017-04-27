@@ -138,6 +138,13 @@ int _up_is_top_domain(char * domain, int length, int root_level) {
 
 	if (root_level == 1) {
 
+		if(length == 2){
+			// There is an exception for .co.jp ...
+			if(strcmp(domain,"co") == 0){
+				return 1;
+			}
+		}
+		
 		if (length != 3) return 0;
 
 		if (_up_check_top_domain(domain, length, _up_top_level) == 1) {
